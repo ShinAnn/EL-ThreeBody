@@ -322,7 +322,7 @@ public class GamePanel  extends JPanel{
 				}
 				System.out.println("---------------------------");
 			}
-			System.out.println("=======================================================================");
+			System.out.println("===========================");
 		}
 	}
 	

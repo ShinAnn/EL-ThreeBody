@@ -14,7 +14,6 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
 
-import model.Information;
 import model.Player;
 import dto.GameDTO;
 
@@ -23,6 +22,7 @@ public class HistoryPanel extends JPanel{
 	private static final long serialVersionUID = 1L;
 	
 	private JList history;
+	String[] historyOperation;
 	JScrollPane scroll;
 	private JButton btnReturn;
 	
@@ -39,12 +39,11 @@ public class HistoryPanel extends JPanel{
 	}
 
 	private void initComonent() {
-		List<Information> informationList = GameDTO.getInstance().getInformations();
-		String[] infos = new String[informationList.size()];
-		for (int i = 0; i < infos.length; i++) {
-			infos[i] = informationList.get(i).getContent();
+		historyOperation=new String[10];
+		for (int i = 0; i < 10; i++) {
+			historyOperation[i]="aa"+i;
 		}
-		this.history = new JList(infos);
+		this.history = new JList(historyOperation);
 		
 		this.history.setBounds(80, 30, 560, 80);
 		history.setFont(new Font("黑体", Font.BOLD, 20));

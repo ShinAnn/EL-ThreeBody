@@ -80,7 +80,7 @@ public class Player implements Serializable {
     	int[] uks = new int[Coordinate.DIMENSIONS];
     	Arrays.fill(uks, uk);
     	for(Player player : GameDTO.getInstance().getPlayers()){
-    		if(player != this){
+    		if(player != GameDTO.getInstance().getUser()){
     			foundCoordinates.put(player, new Coordinate(uks));
     			foundRoles.put(player, null);
     		}

@@ -4,8 +4,8 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Image;
-import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.util.List;
 
 import javax.swing.ImageIcon;
@@ -15,11 +15,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import control.GameControl;
 import model.Player;
-import model.operation.Operation;
-import model.operation.Priviledge_GetRole;
-import dto.AccountDTO;
 import dto.GameDTO;
 
 public class SelectEnemyPanel extends JPanel {
@@ -55,6 +51,7 @@ public class SelectEnemyPanel extends JPanel {
 		msgLabel.setBounds(60,0,180,80);
 		this.add(msgLabel);
 		
+		
 		enemys = new JComboBox<String>();
 		enemys.setFont(new Font("宋体", Font.PLAIN, 30));
 		enemys.setBounds(120,60,60,30);
@@ -68,16 +65,31 @@ public class SelectEnemyPanel extends JPanel {
 				}
 			}
 		}
+		enemys.addItem("aa");
+		enemys.addItem("bb");
 		this.add(enemys);
+		
 	}
 	
-	class OKListener extends MouseAdapter {
+	class OKListener implements MouseListener {
+
+		@Override
+		public void mouseClicked(MouseEvent e) {
+			
+		}
+		@Override
+		public void mousePressed(MouseEvent e) {
+		}
 		@Override
 		public void mouseReleased(MouseEvent e) {
-			String receiver = (String)enemys.getSelectedItem();
-			Operation operation = new Priviledge_GetRole(AccountDTO.getInstance().getId(), receiver);
-			GameControl.getInstance().doOperation(operation);
 			frame.setVisible(false);
+		}
+		@Override
+		public void mouseEntered(MouseEvent e) {
+		}
+		@Override
+		public void mouseExited(MouseEvent e) {
+			
 		}
 	}
 	
