@@ -1,7 +1,5 @@
 package model.operation;
 
-import java.util.List;
-
 import model.Player;
 import model.role.Earth;
 import dto.GameDTO;
@@ -19,7 +17,7 @@ public class Character_Change extends Operation implements Operable {
 	}
 
 	@Override
-	public List<Operation> process() {
+	public void process() {
 		
 		GameDTO dto=GameDTO.getInstance();
 		
@@ -33,7 +31,7 @@ public class Character_Change extends Operation implements Operable {
 		
 		//将操作者设置为地球
 		//1新建一个地球
-		Earth earth=new Earth();
+		Earth earth=new Earth();		
 		//2得到三体玩家的科技值与资源值
 		int techPoint=pOperator.getTechPoint();
 		int resource=pOperator.getResource();
@@ -43,18 +41,23 @@ public class Character_Change extends Operation implements Operable {
 		pOperator.setResource(resource);
 		pOperator.setTechPoint(techPoint);
 		
-		return null;
+		Character_Change cc=new Character_Change(operator, receiver);
+		dto.depositOperation(cc);
+		
 	}
 	
 	public String toOperator(){
+		
 		return this.operator+"从三体转化为地球";
 	}
 	
 	public String toReceiver(){
+		
 		return null;
 	}
 	
 	public String toOthers(){
+		
 		return null;
 	}
 }

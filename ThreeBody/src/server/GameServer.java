@@ -69,7 +69,8 @@ public class GameServer extends UnicastRemoteObject implements RMIGame{
 	}
 
 	@Override
-	public info uploadOperation(String id, List<Operation> unhandled) throws RemoteException {
+	public info uploadOperation(String id, List<Operation> unhandled)
+			throws RemoteException {
 		for (Entry<String, LinkedList<Operation>> entries : unhandledOperations.entrySet()) {
 			if(entries.getKey()!=id){
 				entries.getValue().addAll(unhandled);

@@ -11,7 +11,6 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map.Entry;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -19,16 +18,13 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import model.Coordinate;
 import model.Player;
-import model.role.Role;
 import ui.FrameUtil;
 import ui.InformFrame;
 import ui.block.PatialBlockFrame;
 import ui.block.PatialBlockPanel;
 import ui.sophon.SophonFinderFrame;
 import ui.sophon.SophonFinderPanel;
-import control.GameControl;
 import control.MainControl;
 import dto.AccountDTO;
 import dto.GameDTO;
@@ -76,14 +72,10 @@ public class GamePanel  extends JPanel{
 	
 	private List<Player> enemies = new ArrayList<Player>();
 	private Player user = GameDTO.getInstance().getUser();
-	private GameControl gameControl;
-	private GameDTO gameDTO;
 	
-	public GamePanel(MainControl mainControl,int NumOfPlayer,GameControl gameControl) {
-		this.gameControl = gameControl;
-		this.gameDTO = GameDTO.getInstance();
+	public GamePanel(MainControl mainControl,int NumOfPlayer) {
 		// 初始化对方玩家
-		for (Player player : gameDTO.getPlayers()) {
+		for (Player player : GameDTO.getInstance().getPlayers()) {
 			if(!player.getAccount().getId().equals(user.getAccount().getId())){
 				enemies.add(player);
 			}
@@ -151,7 +143,7 @@ public class GamePanel  extends JPanel{
 	
 	private void coordinateShow(int i){
 		Player pi = this.enemies.get(i);
-		String role = user.getFoundRoles().get(pi) == null ? "未明" : pi.getRole().toString();
+		String role = user.getFoundRoles().get(pi) == null ? "未明" : pi.getRole().getName();
 		coordinateOfEnemies[i].setText("<html>玩家："+pi.getAccount().getId()+"<br>"
 				+"坐标："+user.getFoundCoordinates().get(pi).toString()+"<br>"
 				+"角色："+role+"</html>");
@@ -303,26 +295,7 @@ public class GamePanel  extends JPanel{
 	class ReturnListener extends MouseAdapter  {
 		@Override
 		public void mouseClicked(MouseEvent e) {
-			// TODO 测试
-			System.out.println(AccountDTO.getInstance().getId()+"端:");
-			List<Player> players = GameDTO.getInstance().getPlayers();
-			for (Player player : players) {
-				System.out.println("--"+player.getAccount().getId()+":");
-				System.out.println("--"+player.getRole()+":");
-				System.out.println("--"+"资源："+player.getResource());
-				System.out.println("--"+"科技："+player.getTechPoint());
-				System.out.println("--"+"坐标："+player.getCoordinate().toString());
-				System.out.println("----"+"发现坐标：");
-				for(Entry<Player,Coordinate> entry:player.getFoundCoordinates().entrySet()){
-					System.out.println("----"+entry.getKey().getAccount().getId()+":"+entry.getValue());
-				}
-				System.out.println("----"+"发现角色：");
-				for(Entry<Player,Role> entry:player.getFoundRoles().entrySet()){
-					System.out.println("----"+entry.getKey().getAccount().getId()+":"+entry.getValue());
-				}
-				System.out.println("---------------------------");
-			}
-			System.out.println("===========================");
+			mainControl.toStartMenu();
 		}
 	}
 	
@@ -335,9 +308,9 @@ public class GamePanel  extends JPanel{
 			initSophon();
 		}
 		private void initSophon() {
-			JFrame sophonFinderFrame = new SophonFinderFrame("智子");
-			JPanel finder = new SophonFinderPanel(sophonFinderFrame,gameControl);
-			sophonFinderFrame.setContentPane(finder);
+			JFrame sophonFinder = new SophonFinderFrame("智子");
+			JPanel finder = new SophonFinderPanel(sophonFinder);
+			sophonFinder.setContentPane(finder);
 		}
 		@Override
 		public void mousePressed(MouseEvent e) {
@@ -376,7 +349,7 @@ public class GamePanel  extends JPanel{
 		}
 		private void initSillySophon() {
 			JFrame sophonFinder = new SophonFinderFrame("人造智子");
-			JPanel finder = new SophonFinderPanel(sophonFinder,gameControl);
+			JPanel finder = new SophonFinderPanel(sophonFinder);
 			sophonFinder.setContentPane(finder);
 			
 		}
@@ -765,6 +738,7 @@ public class GamePanel  extends JPanel{
     }
     
     private void ableToPress(Component c){
+		
 		c.setEnabled(isAbleToPress);
 	}
 	private void unableToPress(Component c){

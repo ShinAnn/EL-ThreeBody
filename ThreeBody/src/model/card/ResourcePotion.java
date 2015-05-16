@@ -1,12 +1,9 @@
 package model.card;
 
-import java.util.List;
-
-import model.operation.Operation;
-import config.CardConfig;
-import config.GameConfig;
 import model.operation.ResourceChange;
 import model.operation.TechChange;
+import dto.GameDTO;
+
 
 
 /*
@@ -22,27 +19,20 @@ public class ResourcePotion extends Card {
 
 	public ResourcePotion(String operator, String receiver) {
 		super(operator, receiver);
-		
-		GameConfig gc=new GameConfig();
-		List<CardConfig> cardList=gc.getCardsConfig();
-		this.lifetime=cardList.get(2).getLifetime();
-		this.requiredResource=cardList.get(2).getRequiredResource();
-		this.requiredTechPoint=cardList.get(2).getRequiredTechPoint();
+;
 	}
 
 	@Override
-	public List<Operation> process(List<Operation> subOperations) {
+	public void process() {
+		GameDTO dto=GameDTO.getInstance();
 		
 		//pay techPoint
 		TechChange tc=new TechChange(operator, receiver, TechChange.Type.DECREASE, this.requiredTechPoint);
-		subOperations.add(tc);
-		
+		dto.depositOperation(tc);
 		//get resources
 		ResourceChange rc=new ResourceChange(operator, receiver, ResourceChange.Type.INCREASE, this.requiredResource);
-		subOperations.add(rc);
+		dto.depositOperation(rc);
 		
-		return subOperations;
 	}
-	
 	
 }

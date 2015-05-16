@@ -1,10 +1,7 @@
 package model.card;
 
 import java.io.Serializable;
-import java.util.List;
-
 import model.Player;
-import model.operation.Operation;
 import dto.GameDTO;
 
 public abstract class Card implements Serializable{
@@ -20,15 +17,19 @@ public abstract class Card implements Serializable{
     protected int lifetime;
        
     //ID
-    protected static  String operator;
-    protected static  String receiver;
+    protected String operator;
+    protected String receiver;
     
     public Card(String operator,String receiver){
     	this.operator = operator;
     	this.receiver = receiver;
-    }
 
-    public abstract List<Operation> process(List<Operation> operations);
+    }
+    
+    
+    
+    
+    public abstract void process();
     
     public String getName() {
 		return name;
@@ -46,24 +47,29 @@ public abstract class Card implements Serializable{
 		return lifetime;
 	}
 	
-	protected Player findOperator(GameDTO dto){
+	public Player findOperator(GameDTO dto){
+		
 		Player pOperator=null;
 		for(Player player:dto.getPlayers()){
 			if(player.getAccount().getId().equals(this.operator)){
 				pOperator=player;
 			}
+
 		}
 		return pOperator;
 	}
 	
-	protected Player findReceiver(GameDTO dto){
+	public Player findReceiver(GameDTO dto){
+		
 		Player pReceiver=null;
 		for(Player player:dto.getPlayers()){
 			if(player.getAccount().getId().equals(this.receiver)){
 				pReceiver=player;
 			}
+
 		}
 		return pReceiver;
 	}
 	
+
 }

@@ -1,12 +1,10 @@
 package control;
 
 import java.rmi.RemoteException;
-import java.util.LinkedList;
-import java.util.List;
 
 import javax.swing.JPanel;
 
-import model.Information;
+import model.Broadcast;
 import model.operation.Operable;
 import model.operation.Operation;
 import server.interfaces.RMIGame;
@@ -32,90 +30,76 @@ public class GameControl {
 		}
 		gameDTO = GameDTO.getInstance();
 		gameDTO.init();
-		
-		// 启动同步线程
-		new SyncThread().start();
-	}
-	
-	public void doOperation(Operation operation){
-		gameDTO.depositUnSyncOperation(operation);
-		List<Operation> operations = new LinkedList<Operation>();
-		operations.add(operation);
-		handleOperations(operations);
-	}
-	
-	private List<Operation> handleOperation(Operation operation){
-		// 加到历史里面
-		gameDTO.depositHistoryOperation(operation);
-		// make information
-		String id = gameDTO.getUser().getAccount().getId();
-		if (operation.getOperator().equals(id)) {
-			if (operation.toOperator() != null) {
-				gameDTO.depositInformation(new Information(
-						operation.getOperator(),
-						operation.getReceiver(), 
-						operation.toOperator()));
-			}
-		} else if (operation.getReceiver().equals(id)) {
-			if (operation.toReceiver() != null) {
-				gameDTO.depositInformation(new Information(
-						operation.getOperator(),
-						operation.getReceiver(), 
-						operation.toReceiver()));
-			}
-		} else {
-			if (operation.toOthers() != null) {
-				gameDTO.depositInformation(new Information(
-						operation.getOperator(),
-						operation.getReceiver(), 
-						operation.toOthers()));
-			}
-		}
-		// handle掉Operable
-		if (operation instanceof Operable) {
-			return ((Operable) operation).process();
-		}
-		return null;
-	}
-	
-	/*
-	 * 递归调用operation和它的subOperation
-	 */
-	private void handleOperations(List<Operation> operations){
-		if (operations == null){
-			return;
-		}
-		for(Operation operation:operations){
-			handleOperations(handleOperation(operation));
-		}
+//		
+//		// 启动同步线程
+//		new SyncThread().start();
 	}
 	
 	private class SyncThread extends Thread{
 		
 		String id = gameDTO.getUser().getAccount().getId();
-		
+
 		@Override
 		public void run() {
 			while(!gameDTO.isGameOver()){
-				try {
-					// 上传unhandledOperations
-					rmig.uploadOperation(id, gameDTO.getUnSyncOperations());
-					
-					// handle 同步过来的人家的 Operable
-					handleOperations(rmig.downloadOperation(id));
-				} catch (RemoteException e) {
-					e.printStackTrace();
-				}
-				try {
-					Thread.sleep(6000);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
+				if(!gameDTO.getUnhandledOperations().isEmpty()){
+					try {
+						// 上传unhandledOperations
+						rmig.uploadOperation(id, gameDTO.getUnhandledOperations());
+						
+						// handle 本地的 Operable
+						handleOperation(gameDTO.getUnhandledOperations());
+						
+						// 存入historyOperations并清空unhandledOperations
+						gameDTO.addToHistoryOperations(gameDTO.getUnhandledOperations());
+						gameDTO.setHandled();
+						
+						// handle 同步过来的人家的 Operable
+						handleOperation(rmig.downloadOperation(id));
+						// 存入historyOperations
+						gameDTO.addToHistoryOperations(gameDTO.getUnhandledOperations());
+						
+					} catch (RemoteException e) {
+						e.printStackTrace();
+					}
 				}
 			} //while
 		} //run
+		
+		
+		private void handleOperation(Iterable<Operation> unhandleOperations){
+			for (Operation operation : unhandleOperations){
+				if(operation instanceof Operable){
+					((Operable)operation).process();
+				}
+				// make broadcasts
+				if(operation.getOperator().equals(gameDTO.getUser().getAccount().getId())){
+					if(operation.toOperator()!=null){
+						gameDTO.depositBroadcast(new Broadcast(
+								operation.getOperator(),
+								operation.getReceiver(),
+								operation.toOperator()));
+					}
+				}else if(operation.getReceiver().equals(gameDTO.getUser().getAccount().getId())){
+					if(operation.toReceiver()!=null){
+						gameDTO.depositBroadcast(new Broadcast(
+								operation.getOperator(),
+								operation.getReceiver(),
+								operation.toReceiver()));
+					}
+				}else{
+					if(operation.toOthers()!=null){
+						gameDTO.depositBroadcast(new Broadcast(
+								operation.getOperator(),
+								operation.getReceiver(),
+								operation.toOthers()));
+					}
+				}
+			} // for
+		} // handleOperation
 	} // syncThread
 		
-	private class TimeThread extends Thread{
+	public class TimeThread extends Thread{
 
 		private int seconds;
 		private JPanel countDown;

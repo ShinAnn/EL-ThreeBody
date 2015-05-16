@@ -1,9 +1,5 @@
 package model.role;
 
-import java.util.List;
-
-import config.GameConfig;
-import config.RoleConfig;
 import model.card.Card;
 
 
@@ -19,21 +15,12 @@ import model.card.Card;
 
 public class Earth extends Role{
 	
-	/**
-	 * default
-	 */
-	private static final long serialVersionUID = 1L;
-
 	public Earth() {
 		super();
-		// 原60，10，20,30,测试用改成100，100,20,30
-		
-		GameConfig gc=new GameConfig();		
-		List<RoleConfig> roleList=gc.getRolesConfig();
-		this.initialResource=roleList.get(0).getInitialResource();
-		this.initialTechPoint=roleList.get(0).getInitialTechPoint();
-		this.tchDevelopSpeed=roleList.get(0).getTchDevelopSpeed();
-		this.rsrRestoreSpeed=roleList.get(0).getRsrRestoreSpeed();
+		this.initialResource=30;
+		this.initialTechPoint=10;
+		this.tchDevelopSpeed=15;
+		this.rsrRestoreSpeed=10;
 	}
 	
 	@Override

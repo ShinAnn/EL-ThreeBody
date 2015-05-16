@@ -51,7 +51,9 @@ public class RoomPanel extends JPanel{
 	private JLabel labelLosts;
 	private boolean isAbleToPress=true;
 	private Image opaque = new ImageIcon("images/coNothing.png").getImage();
+	private LobbyControl lobbyControl;
 	private List<Rectangle> locations = new ArrayList<Rectangle>(8);
+	
 	
 	private MainControl mainControl;
 	private RoomControl roomControl;

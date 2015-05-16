@@ -5,12 +5,12 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.dom4j.Document;
-import org.dom4j.DocumentException;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
 
 /*
  * 游戏配置器
+ * 
  */
 public class GameConfig {
 	
@@ -28,27 +28,18 @@ public class GameConfig {
 	 * 构造函数
 	 * 读取XML文件，获取全部游戏配置
 	 */
-	public GameConfig()  {
+	public GameConfig() throws Exception {
 		
 		//创建XML读取器
 		SAXReader reader=new SAXReader();
 		//读取XML文件
-		Document doc = null;
-		try {
-			doc = reader.read("config/cfg.xml");
-		} catch (DocumentException e) {
-			e.printStackTrace();
-		}
+		Document doc=reader.read("config/cfg.xml");
 		//获得XML文件的根节点
 		Element game=doc.getRootElement();
-		
- //   	Element cards=game.element("cards");
-		
 		//配置技能参数
 		this.setCardConfig(game.element("cards"));
 		//配置角色参数
 		this.setRolesConfig(game.element("roles"));
-		
 		
 	
 	}
@@ -57,17 +48,17 @@ public class GameConfig {
 	 * 配置技能参数
 	 */
 	private void setCardConfig(Element cards){
-		 List<Element> cardList=cards.elements("card");
+		List<Element> getCards=cards.elements("card");
 		
 		cardsConfig=new ArrayList<CardConfig>();
-		
-		for(Element card:cardList){
+		for(Element card:getCards){
 			CardConfig cc=new CardConfig(
-					card.attributeValue("className"),
-					Integer.parseInt(card.attributeValue("lifetime")),
-					Integer.parseInt(card.attributeValue("requiredResource")),
-					Integer.parseInt(card.attributeValue("requiredTechPoint"))
-				);
+				card.attributeValue("className"),
+				Integer.parseInt(card.attributeValue("requiredResource")),
+				Integer.parseInt(card.attributeValue("requiredTechPoint")),
+				Integer.parseInt(card.attributeValue("lifetime"))
+			);
+
 			cardsConfig.add(cc);
 		}
 	}

@@ -62,6 +62,8 @@ public class Player implements Serializable {
 		
 		resource = this.role.getInitialResource();
 		techPoint = this.role.getInitialTechPoint();
+		
+		foundRoles = new HashMap<Player, Role>();
 	}
     
     public void findCoordinate(Player player,int position,int value){
@@ -74,15 +76,12 @@ public class Player implements Serializable {
     
     public void initFoundCoordinates(){
     	foundCoordinates = new HashMap<Player, Coordinate>();
-    	foundRoles = new HashMap<Player, Role>();
-    	// make四个都为UNKNOWN的坐标
     	int uk = Coordinate.UNKNOWN;
     	int[] uks = new int[Coordinate.DIMENSIONS];
     	Arrays.fill(uks, uk);
     	for(Player player : GameDTO.getInstance().getPlayers()){
-    		if(player != GameDTO.getInstance().getUser()){
+    		if(!player.getAccount().getId().equals(account.getId())){
     			foundCoordinates.put(player, new Coordinate(uks));
-    			foundRoles.put(player, null);
     		}
     	}
     }
