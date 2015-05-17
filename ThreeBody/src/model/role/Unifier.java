@@ -1,5 +1,9 @@
 package model.role;
 
+import java.util.List;
+
+import config.GameConfig;
+import config.RoleConfig;
 import model.card.Card;
 import model.card.ResourcePotion;
 
@@ -10,15 +14,24 @@ import model.card.ResourcePotion;
  * 资源：初始值：中 增长率：与地球三体都相同
  * 技能限制：无法使用获取身份的技能
  * 广播：同地球
-*/
+ */
 public class Unifier extends Role {
 	
+	/**
+	 * default
+	 */
+	private static final long serialVersionUID = 1L;
+
 	public Unifier() {
 		super();
-		this.initialResource=15;
-		this.initialTechPoint=80;
-		this.tchDevelopSpeed=0;
-		this.rsrRestoreSpeed=10;
+		// 原80，100，0,30,测试用改成100，100,0,30
+		
+		GameConfig gc=new GameConfig();
+		List<RoleConfig> roleList=gc.getRolesConfig();
+		this.initialResource=roleList.get(1).getInitialResource();
+		this.initialTechPoint=roleList.get(1).getInitialTechPoint();
+		this.tchDevelopSpeed=roleList.get(1).getTchDevelopSpeed();
+		this.rsrRestoreSpeed=roleList.get(1).getRsrRestoreSpeed();
 	}
 
 	@Override
@@ -28,6 +41,10 @@ public class Unifier extends Role {
 		}else{
 			return true;
 		}
+	}
+	@Override
+	public String toString(){
+		return "归一者";
 	}
 
 }

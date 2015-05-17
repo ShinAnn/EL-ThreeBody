@@ -1,6 +1,7 @@
 package model.operation;
 
-import dto.GameDTO;
+import java.util.List;
+
 import model.Player;
 
 public class Lose extends Operation implements Operable{
@@ -18,30 +19,21 @@ public class Lose extends Operation implements Operable{
 	}
 
 	@Override
-	public void process() {
-		
-		GameDTO dto=GameDTO.getInstance();
-		
-		dto.getPlayers().remove(player);
+	public List<Operation> process() {
 		player.setLost(true);
 		
-		Lose lose=new Lose(operator, receiver, player);
-		dto.depositOperation(lose);
+		return null;
 	}
 	
 	public String toOperator(){
-		
-		return this.player+"已阵亡！";
-		
+		return this.player.getAccount().getId()+"已阵亡！";
 	}
 	
 	public String toReceiver(){
-		
-		return this.player+"已阵亡！";
+		return this.player.getAccount().getId()+"已阵亡！";
 	}
 
 	public String toOthers(){
-		
-		return this.player+"已阵亡！";
+		return this.player.getAccount().getId()+"已阵亡！";
 	}
 }

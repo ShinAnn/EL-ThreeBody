@@ -1,11 +1,11 @@
 package model.card;
 
+import java.util.List;
 import java.util.Random;
 
-import model.Player;
+import model.operation.Operation;
 import model.operation.ResourceChange;
 import model.operation.ResourceChange.Type;
-import dto.GameDTO;
 
 
 
@@ -22,16 +22,15 @@ public class ResourceGambling extends Card {
 
 	public ResourceGambling(String operator, String receiver, int requiredResource) {
 		super(operator, receiver);
+		this.name = "赌博";
 		this.requiredResource=requiredResource;
 	}
 
 	@Override
-	public void process() {
-		GameDTO dto=GameDTO.getInstance();
-		
+	public List<Operation> process(List<Operation> subOperations) {
 		//pay resources
 		ResourceChange rc=new ResourceChange(operator, receiver, Type.DECREASE, this.requiredResource);
-		dto.depositOperation(rc);
+		subOperations.add(rc);
 		
 		//get 0 or 2 in random
 		int randNum=1;
@@ -42,7 +41,9 @@ public class ResourceGambling extends Card {
 		
 		//get resources
 		ResourceChange rc1=new ResourceChange(operator, receiver, Type.INCREASE, randNum*(this.requiredResource));
-		dto.depositOperation(rc1);
+		subOperations.add(rc1);
+		
+		return subOperations;
 	}
 
 }

@@ -5,6 +5,8 @@ import io.NetClient;
 import java.rmi.RemoteException;
 import java.util.List;
 
+import javax.swing.JPanel;
+
 import model.Room;
 import server.interfaces.RMILobby;
 import ui.lobby.LobbyPanel;
@@ -19,15 +21,26 @@ public class LobbyControl {
 	private RMILobby rmilb;
 	private LobbyPanel lobbyPanel;
 	private MainControl mainControl;
+	private LobbyRefresher lr;
+	private boolean isEntered;
 	
 	public LobbyControl(MainControl mc) {
 		super();
 		this.mainControl = mc;
+		
+		this.startRefresh();
+		
 	}
 	
-	public void refreshPanel(){
-		lobbyPanel.refresh();
+	public void startRefresh() {
+		isEntered=false;
+		lr =new LobbyRefresher();
+		lr.start();
 	}
+
+//	public void refreshPanel(){
+//		mainControl.frame.setContentPane(lobbyPanel);
+//	}
 	
 	public void setLobbyPanel(LobbyPanel lp){
 		this.lobbyPanel = lp;
@@ -100,5 +113,31 @@ public class LobbyControl {
     		rmilb = NetClient.getInstance().getLobbyServer();
     	}
     }
+    
+    /**
+	 * 刷新大厅的界面
+	 */
+	private class LobbyRefresher extends Thread{
+		@Override
+		public void run(){
+			while(!isEntered){
+				try {
+					Thread.sleep(2000);
+					refreshLobbyPanel();
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+				
+			}
+		}
+	}
+	private synchronized void refreshLobbyPanel(){
+		if(!isEntered){
+			lobbyPanel.refresh();
+		}
+	}
+	public synchronized void changeEntered() {
+		this.isEntered = !this.isEntered;
+	}
 
 }

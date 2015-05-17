@@ -112,4 +112,18 @@ public class Coordinate implements Serializable{
 		return sb.toString();
 	}
 	
+	// TODO test
+	public String getProtectingState(){
+		StringBuilder sb = new StringBuilder();
+		for(int i = 0;i<DIMENSIONS;i++){
+			if(isProtected[i]){
+				sb.append("被保护-");
+			}else{
+				sb.append(sequence[i]+"-");
+			}
+		}
+		sb.deleteCharAt(sb.length()-1);
+		return sb.toString();
+	}
+	
 }

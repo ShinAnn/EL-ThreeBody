@@ -1,41 +1,29 @@
 package model.operation;
 
-import java.util.Scanner;
 
-import dto.GameDTO;
-
-public class SendMessage extends Operation implements Operable {
+public class SendMessage extends Operation {
 
 	/**
 	 * default
 	 */
 	private static final long serialVersionUID = 1L;
-
-	public SendMessage(String operator, String receiver) {
-		super(operator, receiver);
-	}
-
-	@Override
-	public void process() {
-		GameDTO dto=GameDTO.getInstance();
-		SendMessage sm=new SendMessage(operator, receiver);
-		dto.depositOperation(sm);
-	}
 	
+	private String msg;
+
+	public SendMessage(String operator, String receiver, String msg) {
+		super(operator, receiver);
+		this.msg = msg;
+	}
+
 	public String toOperator(){
-		Scanner scan = new Scanner(System.in);
-		String s=scan.nextLine();
-		return this.operator+"向"+this.receiver+"发送了一条消息： "+s;
+		
+		return this.operator+"向"+this.receiver+"发送了一条消息： "+msg;
 		
 	}
 	
 	public String toReceiver(){
-		Scanner scan = new Scanner(System.in);
-		String s=scan.nextLine();
-		return this.operator+"向"+this.receiver+"发送了一条消息： "+s;
 		
+		return this.operator+"向"+this.receiver+"发送了一条消息： "+msg;
 	}
-	
-	
 	
 }

@@ -18,7 +18,7 @@ public class CoordinateGet extends Operation {
 
 	@Override
 	public String toOperator() {
-		return this.operator+" 已获得 "+this.receiver+" 第"+number+" 个坐标：꣺"+value;
+		return this.operator+" 已获得 "+this.receiver+" 第"+(number+1)+" 个坐标：꣺"+value;
 	}
 
 	@Override

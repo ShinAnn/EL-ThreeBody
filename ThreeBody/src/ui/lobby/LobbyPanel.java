@@ -15,8 +15,8 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-import ui.FrameUtil;
 import model.Room;
+import ui.FrameUtil;
 import control.LobbyControl;
 import control.MainControl;
 
@@ -28,8 +28,11 @@ public class LobbyPanel extends JPanel implements MouseWheelListener {
 
 	private List<JButton> roomFamily = new ArrayList<JButton>();
 	private List<Room> roomList;
+	private List<Rectangle> locationSave = new ArrayList<Rectangle>();
 	private LobbyControl lobbyControl;
-
+	//双缓冲机制
+	private Image iBuffer;
+	private Graphics gBuffer;
 	public LobbyPanel(MainControl mc) {
 		this.setLayout(null);
 		this.mainControl = mc;
@@ -44,6 +47,39 @@ public class LobbyPanel extends JPanel implements MouseWheelListener {
 		for (int i = 0; i < roomList.size(); i++) {
 			addRoom(i);
 		}
+		for (int i = 0; i < roomFamily.size(); i++) {
+			locationSave.add(roomFamily.get(i).getBounds());
+		}
+		for (int i = 0; i < roomFamily.size(); i++) {
+			this.add(roomFamily.get(i));
+		}
+	}
+	
+	public void refresh(){
+		roomList = lobbyControl.getRooms();
+//		Rectangle rect1 = locationSave.get(0);
+		roomFamily.clear();
+		for (int i = 0; i < roomList.size(); i++) {
+			addRoom(i);
+		}
+		this.removeAll();
+		this.initComonent();
+		locationSave.clear();
+//		Rectangle rectNew=roomFamily.get(0).getBounds();
+//		int xDiff=rectNew.x-rect1.x;
+		for (int i = 0; i < roomFamily.size(); i++) {
+			Rectangle rectNewi=roomFamily.get(i).getBounds();
+//			rectNewi.x+=xDiff;
+			locationSave.add(rectNewi);
+		}
+		createRooms(locationSave);
+		mainControl.frame.setContentPane(this);
+	}
+	
+	private void createRooms(List<Rectangle> locationSave) {
+		for (int i = 0; i < roomFamily.size(); i++) {
+			roomFamily.get(i).setBounds(locationSave.get(i));
+		}		
 		for (int i = 0; i < roomFamily.size(); i++) {
 			this.add(roomFamily.get(i));
 		}
@@ -67,10 +103,11 @@ public class LobbyPanel extends JPanel implements MouseWheelListener {
 		room.add(roomPanel);
 		roomFamily.add(room);
 	}
+	
 
-	public void refresh() {
-		mainControl.toLobby();
-	}
+//	public void refresh() {
+//		mainControl.toLobby();
+//	}
 
 	public void initComonent() {
 		// lobby room 3*2
@@ -88,7 +125,19 @@ public class LobbyPanel extends JPanel implements MouseWheelListener {
 		this.btn_lobbyReturn.addMouseListener(new ReturnListener());
 		this.add(btn_lobbyReturn);
 	}
-
+	@Override
+	public void update(Graphics scr)
+	{
+	    if(iBuffer==null)
+	    {
+	       iBuffer=createImage(this.getSize().width,this.getSize().height);
+	       gBuffer=iBuffer.getGraphics();
+	    }
+	       gBuffer.setColor(getBackground());
+	       gBuffer.fillRect(0,0,this.getSize().width,this.getSize().height);
+	       paint(gBuffer);
+	       scr.drawImage(iBuffer,0,0,this);
+	}
 	public void paintComponent(Graphics g) {
 		Image background = new ImageIcon("images/模糊背景.jpg").getImage();
 		g.drawImage(background, 0, 0, null);
@@ -100,9 +149,10 @@ public class LobbyPanel extends JPanel implements MouseWheelListener {
 			this.roomName = roomName;
 		}
 		@Override
-		public void mouseClicked(MouseEvent e) {
+		public void mouseReleased(MouseEvent e) {
 			switch(lobbyControl.enterRoom(roomName)){
 			case SUCCESS:
+				lobbyControl.changeEntered();
 				mainControl.toRoom(roomName);
 				break;
 			case ROOM_FULL:
@@ -119,7 +169,7 @@ public class LobbyPanel extends JPanel implements MouseWheelListener {
 
 	class CreateRoomListener extends MouseAdapter  {
 		@Override
-		public void mouseClicked(MouseEvent e) {
+		public void mouseReleased(MouseEvent e) {
 			JFrame createRoomFrame = new CreateRoomFrame();
 			JPanel createRoomPanel = new CreateRoomPanel(createRoomFrame,
 					lobbyControl,mainControl);
@@ -129,7 +179,8 @@ public class LobbyPanel extends JPanel implements MouseWheelListener {
 
 	class ReturnListener extends MouseAdapter {
 		@Override
-		public void mouseClicked(MouseEvent e) {
+		public void mouseReleased(MouseEvent e) {
+			lobbyControl.changeEntered();
 			mainControl.toStartMenu();
 		}
 	}
@@ -142,14 +193,18 @@ public class LobbyPanel extends JPanel implements MouseWheelListener {
 				Rectangle rec = roomFamily.get(i).getBounds();
 				rec.x = rec.x - 50;
 				roomFamily.get(i).setBounds(rec);
+				locationSave.remove(i);
+				locationSave.add(i,rec);
 			}
 		}
 		if (e.getWheelRotation() == -1) {
-			// 往左跑
+			// 往右跑
 			for (int i = 0; i < roomFamily.size(); i++) {
 				Rectangle rec = roomFamily.get(i).getBounds();
 				rec.x = rec.x + 50;
 				roomFamily.get(i).setBounds(rec);
+				locationSave.remove(i);
+				locationSave.add(i,rec);
 			}
 		}
 	}

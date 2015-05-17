@@ -4,6 +4,7 @@ import java.rmi.RemoteException;
 
 import model.Room;
 import server.interfaces.RMIRoom;
+import ui.RoomPanel;
 import util.R;
 import dto.AccountDTO;
 
@@ -12,12 +13,21 @@ public class RoomControl {
 	private RMIRoom rmir;
 	private MainControl mainControl;
 	private Room room;
+	private RoomPanel roomPanel;
+	private GameStartChecker gsc;
+	private boolean inRoom;
 	
 	public RoomControl(MainControl mc,RMIRoom rmir){
 		this.mainControl = mc;
 		this.rmir = rmir;
-		this.room = this.refreshRoom();
-		new GameStartChecker().start();
+		room = refreshRoom();
+		this.gsc = new GameStartChecker();
+		this.inRoom = true;
+		gsc.start();
+	}
+	
+	public void setRoomPanel(RoomPanel roomPanel){
+		this.roomPanel = roomPanel;
 	}
 	
 	/**
@@ -64,8 +74,9 @@ public class RoomControl {
 	 * 
 	 * @return SUCCESS: 成功离开房间
 	 */
-	public R.info exit(){
+	public synchronized R.info exit(){
 		try {
+			inRoom = false;
 			mainControl.roomControl = null;
 			mainControl.toLobby();
 			return rmir.exit(AccountDTO.getInstance().getId());
@@ -98,33 +109,43 @@ public class RoomControl {
 	 */
 	public GameControl getGameService(){
 		try {
-			return new GameControl(rmir.getGameServer());
+			GameControl.init(rmir.getGameServer());
+			return GameControl.getInstance();
 		} catch (RemoteException e) {
 			e.printStackTrace();
 		}
 		return null;
 	}
-	
+
 	/**
 	 * 检查游戏是否开始，若开始，进入游戏界面
 	 */
-	private class GameStartChecker extends Thread{
+	private class GameStartChecker extends Thread {
 		@Override
-		public void run(){
-			while(true){
+		public void run() {
+			while (inRoom && !room.isStart()) {
 				try {
 					Thread.sleep(2000);
+					refreshRoomPanel();
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
-				room = refreshRoom();
-				if(room.isStart()){
-					mainControl.toGame(room.getSize());
-					break;
-				}
-				mainControl.toRoom(room.getName());
+			}
+
+			if(room.isStart()){
+				mainControl.toGame(room.getSize());
 			}
 		}
 	}
+	
+	private synchronized void refreshRoomPanel(){
+		if(inRoom){
+			room = refreshRoom();
+			roomPanel.refresh();
+		}
+	}
 
+	public synchronized void changeInRoom() {
+		this.inRoom = !this.inRoom;
+	}
 }

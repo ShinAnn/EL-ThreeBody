@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <game>
-	<cards>
+	<cards >
 		<card  className="model.card.NoBroadcasting" lifetime="1" requiredResource="40" requiredTechPoint="50"/>
 		<card  className="model.card.PatialBlock" lifetime="3" requiredResource="30" requiredTechPoint="20" />
 		<card  className="model.card.ResourcePotion"  lifetime="1" requiredResource="30" requiredTechPoint="5"  />
@@ -12,9 +12,9 @@
 	</cards>
 			
 	<roles>
-		<role className="model.role.Earth" initialResource="30" initialTechPoint="10" tchDevelopSpeed="15" rsrRestoreSpeed="10"/>
-		<role className="model.role.Unifier" initialResource="15" initialTechPoint="80" tchDevelopSpeed="0" rsrRestoreSpeed="10"/>
-		<role className="model.role.ThreeBody" initialResource="10" initialTechPoint="30" tchDevelopSpeed="10" rsrRestoreSpeed="10"/>
+		<role className="model.role.Earth" initialResource="100" initialTechPoint="100" tchDevelopSpeed="20" rsrRestoreSpeed="30"/>
+		<role className="model.role.Unifier" initialResource="100" initialTechPoint="100" tchDevelopSpeed="15" rsrRestoreSpeed="30"/>
+		<role className="model.role.ThreeBody" initialResource="100" initialTechPoint="100" tchDevelopSpeed="0" rsrRestoreSpeed="30"/>
 	</roles>
 
 </game>

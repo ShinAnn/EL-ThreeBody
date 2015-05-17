@@ -4,8 +4,8 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Image;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.util.List;
 
 import javax.swing.ImageIcon;
@@ -16,6 +16,13 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import model.Player;
+import model.card.Card;
+import model.card.NoBroadcasting;
+import model.operation.CardUse;
+import model.operation.Operation;
+import model.operation.Priviledge_GetRole;
+import control.GameControl;
+import dto.AccountDTO;
 import dto.GameDTO;
 
 public class SelectEnemyPanel extends JPanel {
@@ -51,44 +58,35 @@ public class SelectEnemyPanel extends JPanel {
 		msgLabel.setBounds(60,0,180,80);
 		this.add(msgLabel);
 		
-		
 		enemys = new JComboBox<String>();
 		enemys.setFont(new Font("宋体", Font.PLAIN, 30));
 		enemys.setBounds(120,60,60,30);
 		//
-		if (players != null) {
-			for (int i = 0; i < players.size(); i++) {
-				if (players.get(i).equals(user)) {
-					continue;
-				} else {
-					enemys.addItem(players.get(i).getAccount().getId());
-				}
+		for (int i = 0; i < players.size(); i++) {
+			if (players.get(i).equals(user)) {
+				continue;
+			} else {
+				enemys.addItem(players.get(i).getAccount().getId());
 			}
 		}
-		enemys.addItem("aa");
-		enemys.addItem("bb");
 		this.add(enemys);
-		
 	}
 	
-	class OKListener implements MouseListener {
-
-		@Override
-		public void mouseClicked(MouseEvent e) {
-			frame.setVisible(false);
-		}
-		@Override
-		public void mousePressed(MouseEvent e) {
-		}
+	class OKListener extends MouseAdapter {
 		@Override
 		public void mouseReleased(MouseEvent e) {
-		}
-		@Override
-		public void mouseEntered(MouseEvent e) {
-		}
-		@Override
-		public void mouseExited(MouseEvent e) {
-			
+			String receiver = (String)enemys.getSelectedItem();
+			if(msgLabel.getText().equals("选择要干扰的敌人")){
+				// TODO：
+				System.out.println("!!!!!!!!!!!!receiver是："+receiver);
+				Card card = new NoBroadcasting(AccountDTO.getInstance().getId(), receiver);
+				Operation operation = new CardUse(AccountDTO.getInstance().getId(), receiver,card);
+				GameControl.getInstance().doOperation(operation);
+			}else if(msgLabel.getText().equals("选择要探知的敌人")){
+				Operation operation = new Priviledge_GetRole(AccountDTO.getInstance().getId(), receiver);
+				GameControl.getInstance().doOperation(operation);
+			}
+			frame.setVisible(false);
 		}
 	}
 	

@@ -3,13 +3,13 @@ package model;
 /*
  * 包括 坐标广播，系统广播，玩家的消息
  */
-public class Broadcast {
+public class Information {
     
     private String from;
     private String to;
     private String content;
     
-	public Broadcast(String from, String to, String content) {
+	public Information(String from, String to, String content) {
 		super();
 		this.from = from;
 		this.to = to;

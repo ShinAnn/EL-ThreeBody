@@ -93,11 +93,7 @@ public class LogupPanel extends JPanel {
 
 		@Override
 		public void mouseClicked(MouseEvent e) {
-			setVisible(false);
-			panelLogin.setVisible(true);
-			loginFrame.setTitle("登录");
-			loginFrame.setContentPane(panelLogin);
-			repaint();
+
 		}
 		
 		@Override
@@ -106,6 +102,11 @@ public class LogupPanel extends JPanel {
 		}
 		@Override
 		public void mouseReleased(MouseEvent e) {
+			setVisible(false);
+			panelLogin.setVisible(true);
+			loginFrame.setTitle("登录");
+			loginFrame.setContentPane(panelLogin);
+			repaint();
 		}
 		@Override
 		public void mouseEntered(MouseEvent e) {
@@ -120,6 +121,15 @@ public class LogupPanel extends JPanel {
 
 		@Override
 		public void mouseClicked(MouseEvent e) {
+			
+		}
+		
+		@Override
+		public void mousePressed(MouseEvent e) {
+			
+		}
+		@Override
+		public void mouseReleased(MouseEvent e) {
 			String id = idField.getText();
 			String password = passwordField.getText();
 			String invitationID = welcomeCodeField.getText();
@@ -139,14 +149,6 @@ public class LogupPanel extends JPanel {
 				
 				loginFrame.setVisible(false);
 			}
-		}
-		
-		@Override
-		public void mousePressed(MouseEvent e) {
-			
-		}
-		@Override
-		public void mouseReleased(MouseEvent e) {
 		}
 		@Override
 		public void mouseEntered(MouseEvent e) {

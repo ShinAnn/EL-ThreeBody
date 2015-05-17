@@ -4,8 +4,8 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Image;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -13,13 +13,12 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import ui.InformFrame;
-
 public class MessageByFramePanel extends JPanel{
 	private static final long serialVersionUID = 1L;
 	private JFrame frame;
 	private JButton btnOK;
 	private JLabel msgLabel;
+	private TwoSecondCloseFrameThread tscf;
 	/**
 	 * 
 	 * @param successInformFrame 
@@ -28,7 +27,10 @@ public class MessageByFramePanel extends JPanel{
 		this.setLayout(null);
 		this.frame=successInformFrame;
 		this.initComonent(message);
+		this.tscf = new TwoSecondCloseFrameThread();
+		this.tscf.start();
 	}
+	
 	private void initComonent(String message) {
 		this.btnOK = new JButton(new ImageIcon("images/btnOk.png"));
 		this.btnOK.setContentAreaFilled(false);
@@ -43,24 +45,10 @@ public class MessageByFramePanel extends JPanel{
 		this.add(msgLabel);
 	}
 	
-	class OKListener implements MouseListener {
-
-		@Override
-		public void mouseClicked(MouseEvent e) {
-			frame.setVisible(false);
-		}
-		@Override
-		public void mousePressed(MouseEvent e) {
-		}
+	class OKListener extends MouseAdapter {
 		@Override
 		public void mouseReleased(MouseEvent e) {
-		}
-		@Override
-		public void mouseEntered(MouseEvent e) {
-		}
-		@Override
-		public void mouseExited(MouseEvent e) {
-			
+			frame.dispose();
 		}
 	}
 	
@@ -68,5 +56,16 @@ public class MessageByFramePanel extends JPanel{
 		Image IMG_MAIN = new ImageIcon("images/img1.jpg").getImage();
 		// 绘制游戏界面
 		g.drawImage(IMG_MAIN, 0, 0,695,215, null);
+	}
+	private class TwoSecondCloseFrameThread extends Thread{
+		@Override
+		public void run() {
+			try {
+				Thread.sleep(2000);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+			frame.dispose();
+		}
 	}
 }

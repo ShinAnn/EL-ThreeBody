@@ -69,13 +69,14 @@ public class PreferencePanel extends JPanel{
 	class ReturnListener implements MouseListener {
 		@Override
 		public void mouseClicked(MouseEvent e) {
-			mainControl.toStartMenu();
+
 		}
 		@Override
 		public void mousePressed(MouseEvent e) {
 		}
 		@Override
 		public void mouseReleased(MouseEvent e) {
+			mainControl.toStartMenu();
 		}
 		@Override
 		public void mouseEntered(MouseEvent e) {
@@ -89,6 +90,13 @@ public class PreferencePanel extends JPanel{
 		@Override
 		public void mouseClicked(MouseEvent e) {
 			
+
+		}
+		@Override
+		public void mousePressed(MouseEvent e) {
+		}
+		@Override
+		public void mouseReleased(MouseEvent e) {
 			volume*=2;
 			if (volume==0.0f) {
 				volume=(float)0.00390625;
@@ -96,12 +104,6 @@ public class PreferencePanel extends JPanel{
 			volume=volume>=1.0f?1.0f:volume;
 			labelVolume.setText(volume+"");
 			Media.getBgmPlayer().setVolume(volume);
-		}
-		@Override
-		public void mousePressed(MouseEvent e) {
-		}
-		@Override
-		public void mouseReleased(MouseEvent e) {
 		}
 		@Override
 		public void mouseEntered(MouseEvent e) {
@@ -114,16 +116,17 @@ public class PreferencePanel extends JPanel{
 	class VolumnDownListener implements MouseListener {
 		@Override
 		public void mouseClicked(MouseEvent e) {
-			volume/=2;
-			volume=volume<0.003f?0.0f:volume;
-			labelVolume.setText(volume+"");
-			Media.getBgmPlayer().setVolume(volume);
+			
 		}
 		@Override
 		public void mousePressed(MouseEvent e) {
 		}
 		@Override
 		public void mouseReleased(MouseEvent e) {
+			volume/=2;
+			volume=volume<0.003f?0.0f:volume;
+			labelVolume.setText(volume+"");
+			Media.getBgmPlayer().setVolume(volume);
 		}
 		@Override
 		public void mouseEntered(MouseEvent e) {

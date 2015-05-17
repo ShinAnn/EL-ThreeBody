@@ -1,5 +1,9 @@
 package model.operation;
 
+import java.util.LinkedList;
+import java.util.List;
+
+import model.Player;
 import dto.GameDTO;
 
 public class TurnChange extends Operation implements Operable{
@@ -14,22 +18,42 @@ public class TurnChange extends Operation implements Operable{
 	}
 
 	@Override
-	public void process() {
-		GameDTO dto=GameDTO.getInstance();
+	public List<Operation> process() {
+		GameDTO dto = GameDTO.getInstance();
+		Player whoseTurn = null;
+		List<Operation> subOperations = new LinkedList<Operation>();
 		
 		//1.得到回合数
-		int bout=dto.getBout();
+		int bout = dto.getBout();
+		dto.setBout(bout+1);
 		
 		//2.得到玩家的数量
-		int playerNum=dto.getPlayers().size();
+		int playerNum = dto.getPlayers().size();
 
-		
 		//3.将whoseTurn设为从服务器端得到的当前玩家
-		dto.setWhoseTurn(dto.getPlayers().get(bout%playerNum));
+		for(int i = bout % playerNum;;i++){
+			whoseTurn = dto.getPlayers().get(i);
+			// 如果p没输就轮到p，否则轮到下一个
+			if(!whoseTurn.isLost()){
+				dto.setWhoseTurn(whoseTurn);
+				break;
+			}
+		}
 		
+		// 将现在的玩家的资源和科技改变
+		String id = whoseTurn.getAccount().getId();
+		subOperations.add(new ResourceChange(
+				id, 
+				null, 
+				ResourceChange.Type.INCREASE, 
+				whoseTurn.getRole().getRsrRestoreSpeed()));
+		subOperations.add(new TechChange(
+				id, 
+				null, 
+				TechChange.Type.INCREASE, 
+				whoseTurn.getRole().getTchDevelopSpeed()));
 		
-		TurnChange tc=new TurnChange(operator, receiver);
-		dto.depositOperation(tc);
+		return subOperations;
 	}
 	
 	public String toOperator(){

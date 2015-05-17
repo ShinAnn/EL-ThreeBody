@@ -31,6 +31,7 @@ public class AccountControl {
 		AccountDTO.initializeByLocalData(account);
 	}
     
+    // TODO 为了测试删了自动登陆
     public R.info logUp(String id,String password,String invitationID){
     	setUpRMIAC();
     	R.info feedback = null;
@@ -42,11 +43,11 @@ public class AccountControl {
 				mainControl.setConnected(true);
 				// 保存transientID
 				String transientID = rmiac.getTransientID(id);
-				UserData.saveTransientID(transientID);
+//				UserData.saveTransientID(transientID);
 				// 同步网络端的account
 				account = rmia.getAccount();
 				AccountDTO.synchronize(account);	
-				UserData.saveAccount(account);
+//				UserData.saveAccount(account);
 				// 开启检查连接的线程
 				new ConnectionChecker().start();
 			}
@@ -57,6 +58,7 @@ public class AccountControl {
     }
 
     // TODO 比较两端的不同
+    // TODO 为了测试删了自动登陆
 	public R.info login(String id,String password){
 		setUpRMIAC();
 		R.info feedback = null;
@@ -187,7 +189,7 @@ public class AccountControl {
 					break;
 				}
     			try {
-					Thread.sleep(1000);
+					Thread.sleep(10000);
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}

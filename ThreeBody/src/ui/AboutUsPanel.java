@@ -78,8 +78,7 @@ public class AboutUsPanel extends JPanel{
   
 class NextPageListener implements MouseListener{
 	  public void mouseClicked(MouseEvent arg0) {
-		  Media.playSound(Sound.enter);
-		  changeImage();
+
 		  
 	  }
 
@@ -95,6 +94,8 @@ class NextPageListener implements MouseListener{
 
 	  @Override
 	  public void mousePressed(MouseEvent arg0) {
+		  Media.playSound(Sound.enter);
+		  changeImage();
 	  }
 
 	  @Override

@@ -14,6 +14,13 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import control.GameControl;
+import control.MainControl;
+import model.card.ResourceGambling;
+import model.operation.CardUse;
+import ui.FrameUtil;
+import dto.GameDTO;
+
 public class GamblePanel extends JPanel {
 	private static final long serialVersionUID = 1L;
 	private JFrame frame;
@@ -23,6 +30,7 @@ public class GamblePanel extends JPanel {
 	private JTextField idField;
 	/**
 	 * 
+	 * @param mainControl 
 	 * @param successInformFrame 
 	 */
 	public GamblePanel(JFrame frame,String message) {
@@ -59,13 +67,24 @@ public class GamblePanel extends JPanel {
 
 		@Override
 		public void mouseClicked(MouseEvent e) {
-			frame.setVisible(false);
+			
 		}
 		@Override
 		public void mousePressed(MouseEvent e) {
 		}
 		@Override
 		public void mouseReleased(MouseEvent e) {
+			try {
+				int NumberOfResource=Integer.parseInt(idField.getText());
+				String userAccountId=GameDTO.getInstance().getUser().getAccount().getId();
+				ResourceGambling rg = new ResourceGambling(userAccountId, userAccountId, NumberOfResource);
+				CardUse cardUseRg = new CardUse(userAccountId, userAccountId, rg);
+				GameControl.getInstance().doOperation(cardUseRg);
+				frame.setVisible(false);
+			} catch (Exception ex) {
+				FrameUtil.sendMessageByFrame("赌博", "输入错误！");
+			}
+			
 		}
 		@Override
 		public void mouseEntered(MouseEvent e) {

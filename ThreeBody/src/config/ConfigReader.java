@@ -19,9 +19,11 @@ public class ConfigReader {
 			
 			Document doc=reader.read("config/cfg.xml");
 			
+			System.out.println(doc);
 			Element game=doc.getRootElement();
-			List<Element> cards=game.elements("card");
+			Element cards=game.element("cards");
 			
+			List<Element> cardList=cards.elements("card");
 			
 
 		} catch (DocumentException e) {
@@ -31,5 +33,7 @@ public class ConfigReader {
 	
 	}
 	
-	
+	public static void main(String[] args) {
+		ConfigReader.readConfig();
+	}
 }

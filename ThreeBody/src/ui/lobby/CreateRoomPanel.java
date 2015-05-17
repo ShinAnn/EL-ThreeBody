@@ -83,7 +83,7 @@ public class CreateRoomPanel extends JPanel{
 
 	class CreateListener extends MouseAdapter {
 		@Override
-		public void mouseClicked(MouseEvent e) {
+		public void mouseReleased(MouseEvent e) {
 			// 选择的房间人数
 			int size = 0;
 			switch(select.getSelectedIndex()){
@@ -110,6 +110,7 @@ public class CreateRoomPanel extends JPanel{
 			case SUCCESS:
 				createRoomFrame.setVisible(false);
 				FrameUtil.sendMessageByFrame("创建成功", "创建成功");
+				lobbyControl.changeEntered();
 				mainControl.toRoom(idField.getText());
 				break;
 			default:
@@ -120,7 +121,7 @@ public class CreateRoomPanel extends JPanel{
 	
 	class CancelListener extends MouseAdapter {
 		@Override
-		public void mouseClicked(MouseEvent e) {
+		public void mouseReleased(MouseEvent e) {
 			createRoomFrame.setVisible(false);
 		}
 	}

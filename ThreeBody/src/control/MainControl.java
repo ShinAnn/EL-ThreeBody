@@ -1,5 +1,7 @@
 package control;
 
+import io.NetClient;
+
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
@@ -19,14 +21,14 @@ import dto.AccountDTO;
 public class MainControl {
 
 	private JPanel currentPanel = null;
-	private JFrame frame = null;
+	public JFrame frame = null;
 	private JPanel startMenuPanel = null;
 	private JPanel gamePanel = null;
 	private JPanel aboutUs = null;
-	private JPanel lobbyPanel = null;
+	public LobbyPanel lobbyPanel = null;
 	private JPanel account=null;
 	private JPanel preference=null;
-	private JPanel roomPanel=null;
+	public RoomPanel roomPanel=null;
 	private AnimatePanel animate=null;
 	
 	public AccountControl accountControl;
@@ -42,6 +44,13 @@ public class MainControl {
 		
 		mc.accountControl = new AccountControl(mc);
 		String id = AccountDTO.getInstance().getId();
+		
+		new Thread(new Runnable(){
+			public void run(){
+				NetClient.getInstance();
+			}
+		}).start();
+		
 		if(!id.equals("本地玩家")){
 //			if (mc.accountControl.loginByTransientID(id) == R.info.SUCCESS) {
 //				mc.connected = true;
@@ -49,7 +58,6 @@ public class MainControl {
 		}
 		//TODO
 		mc.frame = new MainFrame(mc);
-		mc.currentPanel = mc.startMenuPanel;
 		mc.toStartMenu();
 //		mc.toAnimate("opening");
 		Sound.load("BGM1");
@@ -58,6 +66,9 @@ public class MainControl {
 
 	public void toStartMenu() {
 		this.startMenuPanel = new StartMenuPanel(this);
+		if(currentPanel!=null&&currentPanel==lobbyPanel){
+			currentPanel.setVisible(false);	
+		}
 		currentPanel = this.startMenuPanel;
 		frame.setContentPane(currentPanel);
 		currentPanel.setVisible(true);
@@ -93,7 +104,7 @@ public class MainControl {
 		gameControl = roomControl.getGameService();
 		
 		currentPanel.setVisible(false);
-		this.gamePanel = new GamePanel(this, numOfPlayers);
+		this.gamePanel = new GamePanel(this, numOfPlayers, gameControl);
 		currentPanel = this.gamePanel;
 		frame.setContentPane(currentPanel);
 		currentPanel.setVisible(true);
@@ -105,23 +116,22 @@ public class MainControl {
 		if (lobbyControl == null){
 			lobbyControl = new LobbyControl(this);
 		}
-		
 		currentPanel.setVisible(false);
 		this.lobbyPanel = new LobbyPanel(this);
 		currentPanel = this.lobbyPanel;
 		lobbyControl.setLobbyPanel((LobbyPanel)this.lobbyPanel);
 		frame.setContentPane(currentPanel);
 		currentPanel.setVisible(true);
-		frame.validate();
+		lobbyControl.startRefresh();
 	}
 
 	public void toRoom(String roomName) {
 		if(roomControl == null){
 			roomControl = lobbyControl.getRoomService(roomName);
 		}
-		
 		currentPanel.setVisible(false);
-		this.roomPanel = new RoomPanel(this,roomControl);
+		roomPanel = new RoomPanel(this,roomControl);
+		roomControl.setRoomPanel((RoomPanel)roomPanel);
 		currentPanel = this.roomPanel;
 		frame.setContentPane(currentPanel);
 		currentPanel.setVisible(true);
@@ -147,6 +157,9 @@ public class MainControl {
 	}
 
 	public void exit() {
+		if(roomControl != null){
+			roomControl.exit();
+		}
 		if(connected){
 			accountControl.logout();
 		}

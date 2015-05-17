@@ -1,5 +1,8 @@
 package model.operation;
 
+import java.util.LinkedList;
+import java.util.List;
+
 import model.card.Card;
 
 public class CardUse extends Operation implements Operable{
@@ -16,39 +19,25 @@ public class CardUse extends Operation implements Operable{
 		this.card = card;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * @see model.operation.Visible#toOperator()
-	 * 对操作者可见
-	 */
 	@Override
 	public String toOperator() {
 		return this.operator + "使用了" + card.getName();
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * @see model.operation.Visible#toReceiver()
-	 * 对被使用者不可见
-	 */
 	@Override
 	public String toReceiver() {
 		return null;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * @see model.operation.Visible#toOthers()
-	 * 对其他人不可见
-	 */
 	@Override
 	public String toOthers() {
 		return null;
 	}
 
 	@Override
-	public void process() {
-		card.process();
+	public List<Operation> process() {
+		List<Operation> subOperations = new LinkedList<Operation>();
+		return card.process(subOperations);
 	}
 
 }

@@ -17,7 +17,6 @@ import javax.swing.JTextField;
 
 import ui.FrameUtil;
 import control.AccountControl;
-import dto.AccountDTO;
 
 public class LoginPanel extends JPanel{
 	private static final long serialVersionUID = 1L;
@@ -30,7 +29,10 @@ public class LoginPanel extends JPanel{
 	private JPanel thisPanel;
 	private JLabel passwordLabel;
 	private JLabel errorMsgLabel;
-	
+	private JLabel loadingLabel;
+	//双缓冲机制
+	private Image iBuffer;
+	private Graphics gBuffer;
 	public JFrame getLoginFrame() {
 		return loginFrame;
 	}
@@ -80,11 +82,23 @@ public class LoginPanel extends JPanel{
 		errorMsgLabel.setFont(new Font("宋体", Font.BOLD, 20));
 		errorMsgLabel.setBounds(110,140,190,30);
 		
+		loadingLabel = new JLabel();
+		loadingLabel.setBounds(110,170,190,40);
 	}
 	class LoginListener implements MouseListener {
 
 		@Override
 		public void mouseClicked(MouseEvent e) {
+
+		}
+		
+		 private void setGif() {
+			 loadingLabel.setIcon(new ImageIcon("images/loading2.gif"));
+				add(loadingLabel);
+				loginFrame.setContentPane(thisPanel);
+		}
+
+		private void login() {
 			String id = idField.getText();
 			String password = passwordField.getText();
 			
@@ -110,15 +124,19 @@ public class LoginPanel extends JPanel{
 				add(errorMsgLabel);
 				loginFrame.setContentPane(thisPanel);
 				break;
+			default:
+				break;
 			}
 		}
-		
+
 		@Override
 		public void mousePressed(MouseEvent e) {
 			
 		}
 		@Override
 		public void mouseReleased(MouseEvent e) {
+//			setGif();
+			login();
 		}
 		@Override
 		public void mouseEntered(MouseEvent e) {
@@ -133,11 +151,7 @@ public class LoginPanel extends JPanel{
 
 		@Override
 		public void mouseClicked(MouseEvent e) {
-			setVisible(false);
-			panelLogup.setVisible(true);
-			loginFrame.setTitle("注册");
-			loginFrame.setContentPane(panelLogup);
-			repaint();
+
 		}
 		
 		@Override
@@ -146,6 +160,11 @@ public class LoginPanel extends JPanel{
 		}
 		@Override
 		public void mouseReleased(MouseEvent e) {
+			setVisible(false);
+			panelLogup.setVisible(true);
+			loginFrame.setTitle("注册");
+			loginFrame.setContentPane(panelLogup);
+			repaint();
 		}
 		@Override
 		public void mouseEntered(MouseEvent e) {
@@ -155,6 +174,21 @@ public class LoginPanel extends JPanel{
 			
 		}
 	}
+	
+	@Override
+	public void update(Graphics scr)
+	{
+	    if(iBuffer==null)
+	    {
+	       iBuffer=createImage(this.getSize().width,this.getSize().height);
+	       gBuffer=iBuffer.getGraphics();
+	    }
+	       gBuffer.setColor(getBackground());
+	       gBuffer.fillRect(0,0,this.getSize().width,this.getSize().height);
+	       paint(gBuffer);
+	       scr.drawImage(iBuffer,0,0,this);
+	}
+	
 	public void paintComponent(Graphics g) {
 		Image img = new ImageIcon("images/img1.jpg").getImage();
 		g.drawImage(img, 0, 0, null);

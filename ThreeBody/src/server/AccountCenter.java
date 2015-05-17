@@ -9,7 +9,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 import java.util.Set;
-import java.util.TreeSet;
 
 import javax.rmi.PortableRemoteObject;
 
@@ -183,6 +182,7 @@ public class AccountCenter extends UnicastRemoteObject implements
 			passwords.put(parts[1], parts[2]);
 			String transientID = generateRandomTransientID();
 			transientIDs.put(parts[1],transientID);
+			database.addAccount(parts[1], parts[2], transientID);
 			return "success";
 		case "ainvi":
 			int beforeSize = invitationIDs.size();

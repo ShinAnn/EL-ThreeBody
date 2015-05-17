@@ -175,13 +175,14 @@ public class AccountPanel extends JPanel{
 	class ReturnListener implements MouseListener {
 		@Override
 		public void mouseClicked(MouseEvent e) {
-			mainControl.toStartMenu();
+
 		}
 		@Override
 		public void mousePressed(MouseEvent e) {
 		}
 		@Override
 		public void mouseReleased(MouseEvent e) {
+			mainControl.toStartMenu();
 		}
 		@Override
 		public void mouseEntered(MouseEvent e) {
@@ -194,6 +195,13 @@ public class AccountPanel extends JPanel{
 	class LogOutListener implements MouseListener {
 		@Override
 		public void mouseClicked(MouseEvent e) {
+
+		}
+		@Override
+		public void mousePressed(MouseEvent e) {
+		}
+		@Override
+		public void mouseReleased(MouseEvent e) {
 			switch(accountControl.logoutAndClear()){
 			case SUCCESS:
 				FrameUtil.sendMessageByFrame("登出成功", "登出成功，本地缓存已删除");
@@ -201,12 +209,6 @@ public class AccountPanel extends JPanel{
 			default:
 				FrameUtil.sendMessageByFrame("登出失败", "登出失败 T_T");
 			}
-		}
-		@Override
-		public void mousePressed(MouseEvent e) {
-		}
-		@Override
-		public void mouseReleased(MouseEvent e) {
 		}
 		@Override
 		public void mouseEntered(MouseEvent e) {
@@ -219,15 +221,16 @@ public class AccountPanel extends JPanel{
 	class RevisePWListener implements MouseListener {
 		@Override
 		public void mouseClicked(MouseEvent e) {
-			InformFrame revisePWFrame = new InformFrame("修改密码", 400, 300);
-			RevisePWPanel revisePWpanel = new RevisePWPanel(revisePWFrame, accountControl);
-			revisePWFrame.add(revisePWpanel);
+
 		}
 		@Override
 		public void mousePressed(MouseEvent e) {
 		}
 		@Override
 		public void mouseReleased(MouseEvent e) {
+			InformFrame revisePWFrame = new InformFrame("修改密码", 400, 300);
+			RevisePWPanel revisePWpanel = new RevisePWPanel(revisePWFrame, accountControl);
+			revisePWFrame.add(revisePWpanel);
 		}
 		@Override
 		public void mouseEntered(MouseEvent e) {
@@ -240,6 +243,13 @@ public class AccountPanel extends JPanel{
 	class HeadSelectListener implements MouseListener {
 		@Override
 		public void mouseClicked(MouseEvent e) {
+
+		}
+		@Override
+		public void mousePressed(MouseEvent e) {
+		}
+		@Override
+		public void mouseReleased(MouseEvent e) {
 			JFileChooser jfc = new JFileChooser();
 			jfc.showOpenDialog(jfc);
 			File fileHead = jfc.getSelectedFile();
@@ -247,12 +257,6 @@ public class AccountPanel extends JPanel{
 			Image headImage = new ImageIcon(fileHead.getPath()).getImage();
 			headImage=headImage.getScaledInstance(150, 150, Image.SCALE_SMOOTH);
 			labelHead.setIcon(new ImageIcon(headImage));
-		}
-		@Override
-		public void mousePressed(MouseEvent e) {
-		}
-		@Override
-		public void mouseReleased(MouseEvent e) {
 		}
 		@Override
 		public void mouseEntered(MouseEvent e) {

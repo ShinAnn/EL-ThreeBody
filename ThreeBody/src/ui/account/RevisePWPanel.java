@@ -2,6 +2,7 @@ package ui.account;
 
 import java.awt.Graphics;
 import java.awt.Image;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
@@ -77,35 +78,21 @@ public class RevisePWPanel extends JPanel{
 		
 
 	}
-	class CancelListener implements MouseListener {
+	class CancelListener extends MouseAdapter {
 
 		@Override
 		public void mouseClicked(MouseEvent e) {
 			frame.setVisible(false);
 		}
-		
-		@Override
-		public void mousePressed(MouseEvent e) {
-			
-		}
-		@Override
-		public void mouseReleased(MouseEvent e) {
-		}
-		@Override
-		public void mouseEntered(MouseEvent e) {
-		}
-		@Override
-		public void mouseExited(MouseEvent e) {
-			
-		}
 	}
 	
-	class ReviseListener implements MouseListener {
+	class ReviseListener extends MouseAdapter {
 
 		@Override
 		public void mouseClicked(MouseEvent e) {
 			if(!pwNewField.getText().equals(pwConfirmField.getText())){
 				FrameUtil.sendMessageByFrame("两次输入的密码不一致", "两次输入的密码不一致");
+				return;
 			}
 			switch(accountControl.editPassword(pwOldField.getText(), pwNewField.getText())){
 			case SUCCESS:
@@ -118,24 +105,10 @@ public class RevisePWPanel extends JPanel{
 				break;
 			}
 		}
-		
-		@Override
-		public void mousePressed(MouseEvent e) {
-			
-		}
-		@Override
-		public void mouseReleased(MouseEvent e) {
-		}
-		@Override
-		public void mouseEntered(MouseEvent e) {
-		}
-		@Override
-		public void mouseExited(MouseEvent e) {
-			
-		}
 	}
+
 	public void paintComponent(Graphics g) {
 		Image img = new ImageIcon("images/img1.jpg").getImage();
 		g.drawImage(img, 0, 0, null);
-		}
+	}
 }

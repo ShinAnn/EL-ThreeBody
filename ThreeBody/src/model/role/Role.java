@@ -60,13 +60,14 @@ public abstract class Role implements Serializable{
 		return roles.toArray(new Role[0]);
 	}
 	
-	public String getName(){
-    	return this.getClass().getName();
-    }
+	@Override
+	public String toString(){
+		return this.getClass().getName();
+	}
 
 	@Override
 	public boolean equals(Object arg0) {
-		return this.getName().equals(arg0.getClass().getName());
+		return this.toString().equals(arg0.getClass().getName());
 	}
     
 }

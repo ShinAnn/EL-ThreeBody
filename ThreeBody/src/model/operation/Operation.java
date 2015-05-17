@@ -1,6 +1,7 @@
 package model.operation;
 
 import java.io.Serializable;
+import java.util.List;
 
 public abstract class Operation implements Serializable{
     

@@ -10,12 +10,13 @@ public class CardConfig {
 	
 	private int lifetime;
 
+
+	public CardConfig(String className,int lifetime,int requiredResource,int requiredTechPoint){
 	
-	public CardConfig(String className, int requiredResource,int requiredTechPoint,int lifetime) {
-		this.className = className;
-		this.requiredResource = requiredResource;
-		this.requiredTechPoint = requiredTechPoint;
+		this.className=className;
 		this.lifetime=lifetime;
+		this.requiredResource=requiredResource;
+		this.requiredTechPoint=requiredTechPoint;
 	}
 
 	public int getRequiredResource() {

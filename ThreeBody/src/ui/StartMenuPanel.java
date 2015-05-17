@@ -59,7 +59,6 @@ public class StartMenuPanel extends JPanel{
 		this.btnOption.setBounds(380, 92, 150, 150);
 		this.btnOption.setBorderPainted(false);
 		this.btnOption.addMouseListener(new OptionListener());
-
 		this.add(btnOption);
 
 		Image aboutUs = new ImageIcon("images/AboutUs.png").getImage();
@@ -109,8 +108,9 @@ public class StartMenuPanel extends JPanel{
 
 	class StartGameListener extends MouseAdapter {
 
+		
 		@Override
-		public void mouseClicked(MouseEvent arg0) {
+		public void mouseReleased(MouseEvent e) {
 			Media.playSound(Sound.enter);
 			mainControl.toLobby();
 		}
@@ -118,15 +118,16 @@ public class StartMenuPanel extends JPanel{
 	class OptionListener extends MouseAdapter {
 
 		@Override
-		public void mouseClicked(MouseEvent arg0) {
+		public void mouseReleased(MouseEvent e) {
 			Media.playSound(Sound.enter);
 			mainControl.toPreference();
 		}
 	}
 	class AboutUsListener extends MouseAdapter {
 
+		
 		@Override
-		public void mouseClicked(MouseEvent arg0) {
+		public void mouseReleased(MouseEvent e) {
 			Media.playSound(Sound.enter);
 			Media.playBGM(Sound.career);
 			mainControl.toAboutUs();
@@ -134,7 +135,7 @@ public class StartMenuPanel extends JPanel{
 	}
 	class ExitListener extends MouseAdapter {
 		@Override
-		public void mouseClicked(MouseEvent arg0) {
+		public void mouseReleased(MouseEvent e) {
 			Media.playSound(Sound.goback);
 			mainControl.exit();
 		}
@@ -143,7 +144,7 @@ public class StartMenuPanel extends JPanel{
 	class LogInListener extends MouseAdapter {
 
 		@Override
-		public void mouseClicked(MouseEvent arg0) {
+		public void mouseReleased(MouseEvent e) {
 			Media.playSound(Sound.choose);
 			if(AccountDTO.getInstance().getId() == "本地玩家"){
 				JFrame loginFrame = new LoginFrame();
@@ -160,11 +161,12 @@ public class StartMenuPanel extends JPanel{
 				}
 			}
 		}
+		
 	}
 	
 	class HelpListener extends MouseAdapter {
 		@Override
-		public void mouseClicked(MouseEvent arg0) {
+		public void mouseReleased(MouseEvent e) {
 			Media.playSound(Sound.goback);
 		}
 	}

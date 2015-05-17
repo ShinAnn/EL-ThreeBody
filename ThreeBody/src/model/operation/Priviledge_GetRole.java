@@ -1,12 +1,12 @@
 package model.operation;
 
+import java.util.List;
+
 import model.Player;
 import dto.GameDTO;
 
 
 public class Priviledge_GetRole extends Operation implements Operable {
-
-	
 	
 	/**
 	 * default
@@ -17,15 +17,13 @@ public class Priviledge_GetRole extends Operation implements Operable {
 		super(operator, receiver);		
 	}
 	
-//TODO
 	@Override
 	public String toOperator() {
 		return this.operator + "对"+this.receiver+"使用了特权，得知其身份";
 	}
 
-
 	@Override
-	public void process() {
+	public List<Operation> process() {
 		
 		GameDTO dto=GameDTO.getInstance();
 				
@@ -33,14 +31,14 @@ public class Priviledge_GetRole extends Operation implements Operable {
 		Player pOperator=null;
 		for(Player player:dto.getPlayers()){
 			if(player.getAccount().getId().equals(this.operator)){
-				pOperator=player;
+				pOperator  = player;
 			}
 		}
 		
 		Player pReceiver=null;
 		for(Player player:dto.getPlayers()){
 			if(player.getAccount().getId().equals(this.receiver)){
-				pReceiver=player;
+				pReceiver = player;
 			}
 		}
 		
@@ -49,8 +47,7 @@ public class Priviledge_GetRole extends Operation implements Operable {
 		//再将operator的privilege设为false（初始为true）
 		pOperator.setPrivilegeAvailable(false);
 		
-		Priviledge_GetRole priviledge=new Priviledge_GetRole(operator, receiver);
-		dto.depositOperation(priviledge);
+		return null;
 		
 	}
 		

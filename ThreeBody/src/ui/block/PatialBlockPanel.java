@@ -3,6 +3,7 @@ package ui.block;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Image;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
@@ -11,6 +12,10 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import control.GameControl;
+import dto.GameDTO;
+import model.card.PatialBlock;
+import model.operation.CardUse;
 import ui.FrameUtil;
 
 public class PatialBlockPanel extends JPanel {
@@ -20,7 +25,7 @@ public class PatialBlockPanel extends JPanel {
 	private JButton btnCoordinateTwo;
 	private JButton btnCoordinateThree;
 	private JButton btnCoordinateFour;
-	private JButton btnReturn;
+	private JButton btnOk;
 	private JFrame patialBlock;
 	private int coordinate;
 //	int coordinateOne;
@@ -34,34 +39,34 @@ public class PatialBlockPanel extends JPanel {
 	}
 	
 	private void initComonent() {
-coordinate=1;
+		this.coordinate=0;
 		
 		this.btnCoordinateOne = new JButton();
 		this.btnCoordinateOne.setBounds(11, 16, 99, 60);
-		btnCoordinateOne.setFont(new Font("黑体", Font.BOLD, 60));
-		btnCoordinateOne.setContentAreaFilled(false);
-		btnCoordinateOne.addMouseListener(new CoordinateOneListener());
+		this.btnCoordinateOne.setFont(new Font("黑体", Font.BOLD, 60));
+		this.btnCoordinateOne.setContentAreaFilled(false);
+		this.btnCoordinateOne.addMouseListener(new CoordinateOneListener());
 		
 		
 		this.btnCoordinateTwo = new JButton();
 		this.btnCoordinateTwo.setBounds(120, 16, 99, 60);
-		btnCoordinateTwo.setFont(new Font("黑体", Font.BOLD, 60));
-		btnCoordinateTwo.setContentAreaFilled(false);
-		btnCoordinateTwo.addMouseListener(new CoordinateTwoListener());
+		this.btnCoordinateTwo.setFont(new Font("黑体", Font.BOLD, 60));
+		this.btnCoordinateTwo.setContentAreaFilled(false);
+		this.btnCoordinateTwo.addMouseListener(new CoordinateTwoListener());
 		
 		
 		this.btnCoordinateThree = new JButton();
 		this.btnCoordinateThree.setBounds(229, 16, 99, 60);
-		btnCoordinateThree.setFont(new Font("黑体", Font.BOLD, 60));
-		btnCoordinateThree.setContentAreaFilled(false);
-		btnCoordinateThree.addMouseListener(new CoordinateThreeListener());
+		this.btnCoordinateThree.setFont(new Font("黑体", Font.BOLD, 60));
+		this.btnCoordinateThree.setContentAreaFilled(false);
+		this.btnCoordinateThree.addMouseListener(new CoordinateThreeListener());
 		
 		
 		this.btnCoordinateFour = new JButton();
 		this.btnCoordinateFour.setBounds(339, 16, 99, 60);
-		btnCoordinateFour.setFont(new Font("黑体", Font.BOLD, 60));
-		btnCoordinateFour.setContentAreaFilled(false);
-		btnCoordinateFour.addMouseListener(new CoordinateFourListener());
+		this.btnCoordinateFour.setFont(new Font("黑体", Font.BOLD, 60));
+		this.btnCoordinateFour.setContentAreaFilled(false);
+		this.btnCoordinateFour.addMouseListener(new CoordinateFourListener());
 		
 		this.add(btnCoordinateOne);
 		this.add(btnCoordinateTwo);
@@ -70,135 +75,57 @@ coordinate=1;
 		this.setPicture(coordinate);
 		
 		
-		this.btnReturn = new JButton(new ImageIcon("images/exit.png"));
-		this.btnReturn.setContentAreaFilled(false);
-		this.btnReturn.setBounds(160, 105, 150, 60);
-		this.btnReturn.setBorderPainted(false);
-		btnReturn.addMouseListener(new ReturnListener());
-		this.add(btnReturn);
+		
+		this.btnOk = new JButton(new ImageIcon("images/btnOk.png"));
+		this.btnOk.setContentAreaFilled(false);
+		this.btnOk.setBounds(190, 125, 60,30);
+		this.btnOk.addMouseListener(new OkListener());
+		this.add(btnOk);
 
 		
 	}
 	
-	class ReturnListener implements MouseListener {
-
-		@Override
-		public void mouseClicked(MouseEvent e) {
-			patialBlock.setVisible(false);
-		}
-		@Override
-		public void mousePressed(MouseEvent e) {
-			
-		}
+	class OkListener  extends MouseAdapter {
 		@Override
 		public void mouseReleased(MouseEvent e) {
-		}
-		@Override
-		public void mouseEntered(MouseEvent e) {
-		}
-		@Override
-		public void mouseExited(MouseEvent e) {
-			
+			String id = GameDTO.getInstance().getUser().getAccount().getId();
+			PatialBlock pb = new PatialBlock(id, id, coordinate);
+			CardUse cardUsePb=new CardUse(id, id, pb);
+			GameControl.getInstance().doOperation(cardUsePb);
+			patialBlock.setVisible(false);
 		}
 	}
-	class CoordinateOneListener implements MouseListener {
-
+	
+	class CoordinateOneListener extends MouseAdapter {
 		@Override
-		public void mouseClicked(MouseEvent e) {
+		public void mouseReleased(MouseEvent e) {
+			coordinate=0;
+			setPicture(coordinate);
+			repaint();
+		}
+	}
+	class CoordinateTwoListener extends MouseAdapter {
+		@Override
+		public void mouseReleased(MouseEvent e) {
 			coordinate=1;
 			setPicture(coordinate);
 			repaint();
 		}
-		
-		
-		@Override
-		public void mousePressed(MouseEvent e) {
-			
-		}
+	}
+	class CoordinateThreeListener extends MouseAdapter {
 		@Override
 		public void mouseReleased(MouseEvent e) {
-		}
-		@Override
-		public void mouseEntered(MouseEvent e) {
-		}
-		@Override
-		public void mouseExited(MouseEvent e) {
-			
-		}
-	}
-	class CoordinateTwoListener implements MouseListener {
-
-		@Override
-		public void mouseClicked(MouseEvent e) {
 			coordinate=2;
 			setPicture(coordinate);
 			repaint();
 		}
-		
-		
-		@Override
-		public void mousePressed(MouseEvent e) {
-			
-		}
+	}
+	class CoordinateFourListener extends MouseAdapter {
 		@Override
 		public void mouseReleased(MouseEvent e) {
-		}
-		@Override
-		public void mouseEntered(MouseEvent e) {
-		}
-		@Override
-		public void mouseExited(MouseEvent e) {
-			
-		}
-	}
-	class CoordinateThreeListener implements MouseListener {
-
-		@Override
-		public void mouseClicked(MouseEvent e) {
 			coordinate=3;
 			setPicture(coordinate);
 			repaint();
-		}
-		
-		
-		@Override
-		public void mousePressed(MouseEvent e) {
-			
-		}
-		@Override
-		public void mouseReleased(MouseEvent e) {
-		}
-		@Override
-		public void mouseEntered(MouseEvent e) {
-		}
-		@Override
-		public void mouseExited(MouseEvent e) {
-			
-		}
-	}
-	class CoordinateFourListener implements MouseListener {
-
-		@Override
-		public void mouseClicked(MouseEvent e) {
-			coordinate=4;
-			setPicture(coordinate);
-			repaint();
-		}
-		
-		
-		@Override
-		public void mousePressed(MouseEvent e) {
-			
-		}
-		@Override
-		public void mouseReleased(MouseEvent e) {
-		}
-		@Override
-		public void mouseEntered(MouseEvent e) {
-		}
-		@Override
-		public void mouseExited(MouseEvent e) {
-			
 		}
 	}
 	public void setPicture(int cooperate) {
@@ -206,16 +133,16 @@ coordinate=1;
 		btnCoordinateTwo.setIcon(new ImageIcon("images/coNothing.png"));
 		btnCoordinateThree.setIcon(new ImageIcon("images/coNothing.png"));
 		btnCoordinateFour.setIcon(new ImageIcon("images/coNothing.png"));
-		if(cooperate==1){
+		if(cooperate==0){
 			btnCoordinateOne.setIcon(new ImageIcon("images/select.png"));
 		}
-		if(cooperate==2){
+		if(cooperate==1){
 			btnCoordinateTwo.setIcon(new ImageIcon("images/select.png"));
 		}
-		if(cooperate==3){
+		if(cooperate==2){
 			btnCoordinateThree.setIcon(new ImageIcon("images/select.png"));
 		}
-		if(cooperate==4){
+		if(cooperate==3){
 			btnCoordinateFour.setIcon(new ImageIcon("images/select.png"));
 		}
 	}

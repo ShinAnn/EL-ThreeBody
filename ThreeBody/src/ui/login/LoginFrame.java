@@ -1,6 +1,9 @@
 package ui.login;
 
+import java.awt.Color;
+
 import javax.swing.JFrame;
+import javax.swing.JPanel;
 
 import ui.FrameUtil;
 
@@ -13,11 +16,12 @@ public class LoginFrame extends JFrame{
     	this.setSize(400,300);
     	//不允许用户改变窗口大小
     	this.setResizable(false);
+    	this.getContentPane().setBackground(new Color(0, 0, 0, 0.5f));
     	//窗口居中
     	FrameUtil.setFrameCenter(this);
-//    	this.setContentPane(panel);
     	//默认窗口为显示
     	this.setVisible(true);
+    	
 	}
 	
 	

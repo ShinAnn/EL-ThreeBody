@@ -1,5 +1,9 @@
 package model.role;
 
+import java.util.List;
+
+import config.GameConfig;
+import config.RoleConfig;
 import model.card.Card;
 
 /*
@@ -14,16 +18,28 @@ import model.card.Card;
  */
 public class ThreeBody extends Role{
 
+	/**
+	 * default
+	 */
+	private static final long serialVersionUID = 1L;
+	
 	public ThreeBody() {
 		super();
-		this.initialResource=10;
-		this.initialTechPoint=30;
-		this.tchDevelopSpeed=10;
-		this.rsrRestoreSpeed=10;
+		// 原60，30，15,30,测试用改成100，100,15,30
+		
+		GameConfig gc=new GameConfig();
+		List<RoleConfig> roleList=gc.getRolesConfig();
+		this.initialResource=roleList.get(2).getInitialResource();
+		this.initialTechPoint=roleList.get(2).getInitialTechPoint();
+		this.tchDevelopSpeed=roleList.get(2).getTchDevelopSpeed();
+		this.rsrRestoreSpeed=roleList.get(2).getRsrRestoreSpeed();
 	}
 	public  boolean isAvailable(Card card){
 		return true;
 	}
-
+	@Override
+	public String toString(){
+		return "三体";
+	}
 
 }

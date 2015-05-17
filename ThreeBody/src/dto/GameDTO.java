@@ -3,7 +3,7 @@ package dto;
 import java.util.LinkedList;
 import java.util.List;
 
-import model.Broadcast;
+import model.Information;
 import model.Player;
 import model.operation.Operation;
 
@@ -14,6 +14,9 @@ public class GameDTO {
 	 */
 	private static GameDTO dto;
     
+	/*
+	 * 所有玩家
+	 */
     private List<Player> players;
     
     /*
@@ -38,15 +41,15 @@ public class GameDTO {
     /*
      * 历史消息记录
      */
-    private List<Broadcast> broadcasts;
+    private List<Information> informations;
     /*
      * 历史操作记录
      */
     private List<Operation> historyOperations;
     /*
-     * 待执行操作
+     * 待同步操作
      */
-    private List<Operation> unhandledOperations;
+    private List<Operation> unSyncOperations;
     /*
      * 游戏是否结束
      */
@@ -57,23 +60,16 @@ public class GameDTO {
     }
     
     private GameDTO(List<Player> players){
-    	//TODO 本地账号
     	this.players = players;
-    	
-    	//TODO test
-//    	this.players.add(new Player(new Account("A"),new Earth(),Coordinate.generateCoordinate(),false));
-//    	this.players.add(new Player(new Account("B"),new Unifier(),Coordinate.generateCoordinate(),false));
-//    	this.players.add(new Player(new Account("C"),new ThreeBody(),Coordinate.generateCoordinate(),false));
-//    	user = this.players.get(0);
+    	// 找USER
     	for(Player player:players){
     		if(player.getAccount().getId().equals(AccountDTO.getInstance().getId())){
     			user = player;
     		}
     	}
-    	
-    	broadcasts = new LinkedList<Broadcast>();
+    	informations = new LinkedList<Information>();
     	historyOperations = new LinkedList<Operation>();
-    	unhandledOperations = new LinkedList<Operation>();
+    	unSyncOperations = new LinkedList<Operation>();
     	gameOver = false;
     }
     
@@ -87,12 +83,20 @@ public class GameDTO {
     	return dto;
     }
     
-    public void depositOperation(Operation operation){
-        this.unhandledOperations.add(operation);
+    public void depositHistoryOperation(Operation operation){
+    	this.historyOperations.add(operation);
     }
     
-    public void depositBroadcast(Broadcast br){
-    	this.broadcasts.add(br);
+    public synchronized void depositInformation(Information br){
+    	this.informations.add(br);
+    }
+    
+    public void depositUnSyncOperation(Operation operation){
+    	this.unSyncOperations.add(operation);
+    }
+    
+    public void setSynced(){
+    	this.unSyncOperations.clear();
     }
 
     /*
@@ -122,26 +126,18 @@ public class GameDTO {
 		return user;
 	}
 
-	public List<Broadcast> getBroadcasts() {
-		return broadcasts;
+	public synchronized String[] getInformations(){
+		String[] infos = new String[informations.size()];
+		for (int i = 0; i < infos.length; i++) {
+			infos[i] = informations.get(i).getContent();
+		}
+		return infos;
 	}
 
 	public List<Operation> getHistoryOperations() {
 		return historyOperations;
 	}
 	
-	public void addToHistoryOperations(List<Operation> oprts){
-		historyOperations.addAll(oprts);
-	}
-
-	public List<Operation> getUnhandledOperations() {
-		return unhandledOperations;
-	}
-	
-	public void setHandled(){
-		unhandledOperations.clear();
-	}
-
 	public boolean isGameOver() {
 		return gameOver;
 	}
@@ -158,4 +154,7 @@ public class GameDTO {
 		this.whoseTurn = whoseTurn;
 	}
 
+	public List<Operation> getUnSyncOperations() {
+		return unSyncOperations;
+	}
 }

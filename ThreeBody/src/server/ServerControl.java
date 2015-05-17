@@ -24,6 +24,11 @@ public class ServerControl extends UnicastRemoteObject implements RMIServerContr
 	protected ServerControl() throws RemoteException {
 		super();
 		try {
+			try {
+				Naming.rebind("ServerControl", (RMIServerControl)this);
+			} catch (MalformedURLException e) {
+				e.printStackTrace();
+			}
 			accountCenter = new AccountCenter();
 			lobbyServer = new LobbyServer(accountCenter);
 			imageServer = new ImageServer();

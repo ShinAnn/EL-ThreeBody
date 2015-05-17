@@ -1,8 +1,11 @@
 package model.operation;
 
-import dto.GameDTO;
+import java.util.LinkedList;
+import java.util.List;
+
 import model.Coordinate;
 import model.Player;
+import dto.GameDTO;
 
 public class Broadcast extends Operation implements Operable{
 
@@ -19,34 +22,32 @@ public class Broadcast extends Operation implements Operable{
 	}
 
 	@Override
-	public void process() {
+	public List<Operation> process() {
 		//如果某个坐标与广播的坐标相同
 		//该坐标对应玩家就输了，通过从players中移除实现
 		GameDTO dto = GameDTO.getInstance();
+		List<Operation> subOperations = null;
 		for(Player player:dto.getPlayers()){
 			if(player.getCoordinate().equals(coordinate)){
-				dto.getPlayers().remove(player);
-				Broadcast broadcast=new Broadcast(operator, receiver, coordinate);
-				dto.depositOperation(broadcast);
+				// TODO 未定
+				Lose lose = new Lose(null,null,player);
+				subOperations = new LinkedList<Operation>();
+				subOperations.add(lose);
 			}
 		}
-		
+		return subOperations;
 	}
 	
 	public String toOperator(){
-		
-		return  this.operator+"发布了广播";
-		
+		return this.operator+"发布了广播:"+coordinate.toString();
 	}
 	
 	public String toReceiver (){
-		
-		return null;
+		return "有人发了广播:"+coordinate.toString();
 	}
 	
 	public String toOthers(){
-		
-		return null;
+		return "有人发了广播:"+coordinate.toString();
 	}
 
 }

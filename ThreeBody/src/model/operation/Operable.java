@@ -1,7 +1,9 @@
 package model.operation;
 
+import java.util.List;
+
 public interface Operable {
 	
-	void process();
+	List<Operation> process();
 
 }
