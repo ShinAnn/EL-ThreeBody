@@ -5,8 +5,6 @@ import io.NetClient;
 import java.rmi.RemoteException;
 import java.util.List;
 
-import javax.swing.JPanel;
-
 import model.Room;
 import server.interfaces.RMILobby;
 import ui.lobby.LobbyPanel;
@@ -29,7 +27,6 @@ public class LobbyControl {
 		this.mainControl = mc;
 		
 		this.startRefresh();
-		
 	}
 	
 	public void startRefresh() {
@@ -37,10 +34,6 @@ public class LobbyControl {
 		lr =new LobbyRefresher();
 		lr.start();
 	}
-
-//	public void refreshPanel(){
-//		mainControl.frame.setContentPane(lobbyPanel);
-//	}
 	
 	public void setLobbyPanel(LobbyPanel lp){
 		this.lobbyPanel = lp;

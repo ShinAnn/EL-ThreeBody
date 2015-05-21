@@ -65,11 +65,8 @@ public class LobbyPanel extends JPanel implements MouseWheelListener {
 		this.removeAll();
 		this.initComonent();
 		locationSave.clear();
-//		Rectangle rectNew=roomFamily.get(0).getBounds();
-//		int xDiff=rectNew.x-rect1.x;
 		for (int i = 0; i < roomFamily.size(); i++) {
 			Rectangle rectNewi=roomFamily.get(i).getBounds();
-//			rectNewi.x+=xDiff;
 			locationSave.add(rectNewi);
 		}
 		createRooms(locationSave);
@@ -104,11 +101,6 @@ public class LobbyPanel extends JPanel implements MouseWheelListener {
 		roomFamily.add(room);
 	}
 	
-
-//	public void refresh() {
-//		mainControl.toLobby();
-//	}
-
 	public void initComonent() {
 		// lobby room 3*2
 		this.btn_createRoom = new JButton();

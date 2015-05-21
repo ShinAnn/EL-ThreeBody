@@ -80,9 +80,7 @@ public class GameControl {
 					} catch (InterruptedException e) {
 						e.printStackTrace();
 					}
-					System.out.println("转跳前");
-					MainControl.getInstance().toLobby();
-					System.out.println("转跳后");
+					MainControl.getInstance().toScore(gameDTO.getUser().isLost());;
 				}
 			}).start();
 		} catch (RemoteException e) {

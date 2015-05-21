@@ -187,6 +187,8 @@ public class MainControl {
 	}
 	
 	public void toScore(boolean isLost) {
+		roomControl.exit();
+		
 		currentPanel.setVisible(false);
 		this.score = new ScorePanel(isLost,this);
 		currentPanel = this.score;
